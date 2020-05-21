@@ -1,0 +1,10 @@
+syntax = "proto3";
+option go_package = ".;model";
+// protoc --go_out=. model.proto
+
+message RepoOptions {
+    string title =  1;
+    string URL = 2;
+    string branch = 3;
+    bytes privateKey = 4;
+}
