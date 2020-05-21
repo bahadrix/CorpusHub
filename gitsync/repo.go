@@ -67,7 +67,7 @@ func NewRepo(localPath string, options *model.RepoOptions) (*Repo, error) {
 	}, nil
 }
 
-func (r *Repo) generateURIForPath(path string) string {
+func (r *Repo) GenerateFullPath(path string) string {
 	return fmt.Sprintf("%s/%s", r.repoURI, strings.Trim(path, "/"))
 }
 
@@ -101,7 +101,7 @@ func (r *Repo) GetFileInfos(path string, recursive bool) (infoMap map[string]*os
 				continue
 			}
 			fpath := filepath.Join(dirPath, info.Name())
-			fileURI := r.generateURIForPath(fpath)
+			fileURI := r.GenerateFullPath(fpath)
 			infoMap[fileURI] = &info
 
 			if recursive && info.IsDir() {
