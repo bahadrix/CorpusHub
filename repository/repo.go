@@ -1,4 +1,4 @@
-package gitsync
+package repository
 
 import (
 	"bytes"
