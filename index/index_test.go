@@ -3,8 +3,6 @@ package index
 import (
 	"fmt"
 	"github.com/bahadrix/corpushub/repository"
-
-	"github.com/bahadrix/corpushub/model"
 	"github.com/stretchr/testify/assert"
 	"io/ioutil"
 	"log"
@@ -43,14 +41,12 @@ func TestMain(m *testing.M) {
 
 	repoPath := fmt.Sprintf("%s/git-mock-repo", workFolder)
 
-
-	var mockRepoOptions = &model.RepoOptions{
+	var mockRepoOptions = &repository.RepoOptions{
 		Title:      "Mock Repo",
 		URL:        "git@github.com:bahadrix/git-mock-repo.git",
 		Branch:     "master",
 		PrivateKey: repoDeployKey,
 	}
-
 
 	//defer os.RemoveAll(workFolder)
 
@@ -122,8 +118,6 @@ func TestCreateIndex(t *testing.T) {
 		mdCount++
 
 	}
-
-
 
 	err = index.Close()
 

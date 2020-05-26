@@ -2,7 +2,6 @@ package repository
 
 import (
 	"fmt"
-	"github.com/bahadrix/corpushub/model"
 	"github.com/stretchr/testify/assert"
 	"io/ioutil"
 	"os"
@@ -19,7 +18,6 @@ AAAED5KICQxVeoWmSI7we4WYArFyjfIKa57+xq+p31EI95n/4YlO1qOh2s81mZOrXRlHhV
 ygXG85o1zTREl/ZKKpGoAAAAG2JhaGFkaXJAQmFoYWRpcnMtaUJhZy5sb2NhbAEC
 -----END OPENSSH PRIVATE KEY-----
 `)
-
 
 var workFolder string
 
@@ -42,16 +40,15 @@ func TestMain(m *testing.M) {
 
 	}()
 
-
 	m.Run()
 
 }
 
 func TestClone(t *testing.T) {
 
-	for _, branchToTest := range []string{"master", "test"}{
+	for _, branchToTest := range []string{"master", "test"} {
 		t.Run(branchToTest, func(t *testing.T) {
-			var mockRepoOptions = &model.RepoOptions{
+			var mockRepoOptions = &RepoOptions{
 				Title:      "Mock Repo",
 				URL:        "git@github.com:bahadrix/git-mock-repo.git",
 				Branch:     branchToTest,
@@ -108,8 +105,5 @@ func TestClone(t *testing.T) {
 
 		})
 	}
-
-
-
 
 }

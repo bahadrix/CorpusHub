@@ -4,7 +4,6 @@ import (
 	"bytes"
 	"container/list"
 	"fmt"
-	"github.com/bahadrix/corpushub/model"
 	"github.com/bahadrix/corpushub/util"
 	"github.com/go-git/go-git/v5"
 	"io"
@@ -18,12 +17,19 @@ import (
 	"golang.org/x/crypto/ssh"
 )
 
+type RepoOptions struct {
+	Title      string `json:"title,omitempty"`
+	URL        string `json:"URL,omitempty"`
+	Branch     string `json:"branch,omitempty"`
+	PrivateKey []byte `json:"privateKey,omitempty"`
+}
+
 type Repo struct {
 	gitrepo   *git.Repository
 	worktree  *git.Worktree
 	auth      transport.AuthMethod
 	localPath string
-	options   *model.RepoOptions
+	options   *RepoOptions
 	repoURI   string
 }
 
@@ -44,7 +50,7 @@ func normalizeGitURL(url string) string {
 
 }
 
-func NewRepo(localPath string, options *model.RepoOptions) (*Repo, error) {
+func NewRepo(localPath string, options *RepoOptions) (*Repo, error) {
 
 	signer, err := ssh.ParsePrivateKey(options.PrivateKey)
 
@@ -52,7 +58,7 @@ func NewRepo(localPath string, options *model.RepoOptions) (*Repo, error) {
 		return nil, err
 	}
 
-	if options.GetBranch() == "" {
+	if options.Branch == "" {
 		options.Branch = "master"
 	}
 
@@ -168,7 +174,7 @@ func (r *Repo) Sync() (alreadyUpToDate bool, err error) {
 
 }
 
-func (r *Repo) ReadFile(fileURI string) ([]byte, error){
+func (r *Repo) ReadFile(fileURI string) ([]byte, error) {
 	filePath := strings.TrimPrefix(fileURI, r.repoURI)
 
 	file, err := r.worktree.Filesystem.Open(filePath)
