@@ -1,0 +1,197 @@
+swagger: "2.0"
+info:
+  description: "API for communitacting with CorpusHub service"
+  version: "1.0.0"
+  title: "CorpusHub API"
+  contact:
+    name: "Bahadir Katipoglu"
+basePath: "/v1"
+schemes:
+  - "http"
+  - "https"
+
+
+tags:
+  - name: search
+    description: Search operations
+  - name: repo
+    description: Repository operations
+
+
+paths:
+  /ping:
+    get:
+      summary: "Returns PONG with host and server port info."
+      produces:
+        - "text/plain"
+      responses:
+        200:
+          description: Returns status as PONGv[revision] [Host] [Service port]
+
+  /repos:
+    put:
+      tags:
+        - "repo"
+      summary: "Adds new repository"
+      parameters:
+        - in: "body"
+          name: "body"
+          schema:
+            $ref: '#/definitions/Repo'
+      responses:
+        200:
+          description: Returns newly added URI identifier of repo
+          schema:
+            type: object
+            properties:
+              uri:
+                type: string
+                example: "repo://github.com:bahadrix/git-mock-repo"
+    get:
+      tags:
+        - "repo"
+      summary: "Returns all repository identifiers"
+      responses:
+        200:
+          description: "Array of identifiers"
+          schema:
+            type: array
+            items:
+              type: string
+            example:
+              - "repo://github.com:bahadrix/git-mock-repo"
+
+
+  /repo:
+    get:
+      tags:
+        - "repo"
+      summary: "Get repo details"
+      parameters:
+        - name: uri
+          in: "query"
+          description: "URI of requested repo"
+          required: true
+          type: string
+
+      responses:
+        200:
+          description: "Repo details"
+          schema:
+            $ref: '#/definitions/Repo'
+
+    delete:
+      tags:
+        - "repo"
+      summary: "Delete repo and all of indices"
+      parameters:
+        - name: uri
+          in: "query"
+          description: "URI of requested repo"
+          required: true
+          type: string
+
+      responses:
+        200:
+          description: Returns URI identifier of deleted repo
+          schema:
+            type: object
+            properties:
+              uri:
+                type: string
+                example: "repo://github.com:bahadrix/git-mock-repo"
+
+  /search:
+    get:
+      tags:
+        - "search"
+      summary: "Search through the corpus"
+      parameters:
+        - name: "q"
+          in: "query"
+          description: "Search query"
+          required: true
+          type: string
+      responses:
+        200:
+          description: Results of search
+          schema:
+            $ref: '#/definitions/SearchResult'
+
+definitions:
+
+  Repo:
+    type: "object"
+    properties:
+      title:
+        type: string
+        description: "Title of the repository"
+        example: "Our Documentation Repository"
+      URL:
+        type: string
+        description: "Git URL of repository"
+        example: "git@github.com:bahadrix/git-mock-repo.git"
+      branch:
+        type: string
+        description: "Branch of repository"
+        default: "master"
+        example: "master"
+      privateKey:
+        type: string
+        description: "SSH private key for repo"
+        example: "-----BEGIN OPENSSH PRIVATE KEY----- ... -----END OPENSSH PRIVATE KEY-----"
+    required:
+      - title
+      - URL
+      - privateKey
+
+  SearchResult:
+    type: "object"
+    properties:
+      total_hits:
+        type: number
+        description: "Total hit count"
+        example: 1
+      max_score:
+        type: number
+        format: float
+        description: Maximum of current result scores
+        example: 0.12222137233284121
+      took:
+        type: number
+        format: int64
+        description: Elapsed processing time in nanoseconds
+        example: 362662
+      hits:
+        type: array
+        items:
+          type: object
+          properties:
+            id:
+              type: string
+              description: Uniform resource identifier of source
+              example: repo://github.com:bahadrix/git-mock-repo/master/testdocs/sub1/README.md
+            score:
+              type: number
+              format: float
+              description: Hit score
+              example: 0.12222137233284121
+            fragments:
+              type: object
+              properties:
+                content:
+                  type: string
+                  description: Marked content fragment
+                  example: "…ornare molestie. Mauris ut ultricies \u003cmark\u003elorem\u003c/mark\u003e, suscipit accumsan sapien. Suspendisse id tortor dignissim, condimentum lacus ac, ultricies augue. Aenean bibendum \u003cmark\u003elorem\u003c/mark\u003e sit amet neque elementum, nec tempor…"
+            fields:
+              type: object
+              properties:
+                title:
+                  type: string
+                  description: Title of file
+                  example: "Dolor Sit Amet"
+                last_modified:
+                  type: string
+                  format: date-time
+                  description: Last modification time of file in UTC
+                  example: "2020-06-03T13:49:07Z"
