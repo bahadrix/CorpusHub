@@ -3,7 +3,6 @@ package repository
 import (
 	"bytes"
 	"container/list"
-	"encoding/json"
 	"fmt"
 	"github.com/bahadrix/corpushub/util"
 	"github.com/go-git/go-git/v5"
@@ -17,27 +16,6 @@ import (
 	ggssh "github.com/go-git/go-git/v5/plumbing/transport/ssh"
 	"golang.org/x/crypto/ssh"
 )
-
-type RepoOptions struct {
-	Title      string `json:"title,omitempty"`
-	URL        string `json:"URL,omitempty"`
-	Branch     string `json:"branch,omitempty"`
-	PrivateKey []byte `json:"privateKey,omitempty"`
-}
-
-func (ro *RepoOptions) GetNormalizedURI() string {
-	return normalizeGitURL(ro.URL)
-}
-
-func (ro *RepoOptions) Serialize() ([]byte, error) {
-	return json.Marshal(ro)
-}
-
-func DeserializeRepoOptions(data []byte ) (*RepoOptions, error) {
-	var ro RepoOptions
-	err := json.Unmarshal(data, &ro)
-	return &ro, err
-}
 
 type Repo struct {
 	gitrepo   *git.Repository
