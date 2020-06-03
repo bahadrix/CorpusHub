@@ -16,6 +16,7 @@ require (
 	github.com/remyoudompheng/bigfft v0.0.0-20200410134404-eec4a21b6bb0 // indirect
 	github.com/stretchr/testify v1.4.0
 	github.com/tecbot/gorocksdb v0.0.0-20191217155057-f0fad39f321c // indirect
+	go.etcd.io/bbolt v1.3.4
 	golang.org/x/crypto v0.0.0-20200302210943-78000ba7a073
 	google.golang.org/protobuf v1.23.0
 )
