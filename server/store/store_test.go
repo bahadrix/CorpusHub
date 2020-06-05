@@ -31,12 +31,12 @@ func TestMain(m *testing.M) {
 func TestOptions(t *testing.T) {
 
 	// Add sample repo
-	err := repoStore.PutRepoOptions(&repository.RepoOptions{
+	err := repoStore.PutRepo(&repository.RepoOptions{
 		Title:      "Mock Repo",
 		URL:        "git@github.com:bahadrix/git-mock-repo.git",
 		Branch:     "master",
 		PrivateKey: []byte("le key"),
-	})
+	}, nil)
 
 	if err != nil {
 		t.Error(err)
@@ -60,7 +60,7 @@ func TestOptions(t *testing.T) {
 	}
 
 	// Add this also to store
-	err = repoStore.PutRepoOptions(testOpts2)
+	err = repoStore.PutRepo(testOpts2, nil)
 	if err != nil {
 		t.Error(err)
 	}
@@ -83,12 +83,12 @@ func TestOptions(t *testing.T) {
 	assert.Equal(t, testOpts2, opts)
 
 	// Add another repo
-	err = repoStore.PutRepoOptions(&repository.RepoOptions{
+	err = repoStore.PutRepo(&repository.RepoOptions{
 		Title:      "Mock Repo",
 		URL:        "git@github.com:bahadrix/git-mock-repo2.git",
 		Branch:     "master",
 		PrivateKey: []byte("le key"),
-	})
+	}, nil)
 
 	if err != nil {
 		t.Error(err)
@@ -155,6 +155,26 @@ func TestOptions(t *testing.T) {
 	value, err = repoStore.GetMeta("github.com:bahadrix/git-mock-repo", []byte("Test meta key"))
 	assert.Nil(t, value)
 	assert.Nil(t, err)
+
+	// Add metamap at repo creation
+	metaMap := map[string][]byte{
+		"maKey": []byte("Ma Value"),
+		"maKey2": []byte("Ma Value2"),
+	}
+	err = repoStore.PutRepo(opts, metaMap)
+	if err != nil {
+		t.Error(err)
+	}
+
+	for k, v := range metaMap {
+		value, err = repoStore.GetMeta("github.com:bahadrix/git-mock-repo", []byte(k))
+		if err != nil {
+			t.Error(err)
+		}
+		assert.Equal(t,  v, value)
+	}
+
+
 
 
 }
