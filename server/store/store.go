@@ -40,8 +40,8 @@ func NewRepoStore(dbPath string) (*RepoStore, error) {
 	}, nil
 }
 
-// PutRepoOptions creates or updates (upserting) options by its own normalized repo uri
-func (s *RepoStore) PutRepoOptions(options *repository.RepoOptions) error {
+// PutRepo creates or updates (deep upsert) options by its own normalized repo uri
+func (s *RepoStore) PutRepo(options *repository.RepoOptions, metaMap map[string][]byte) error {
 
 	return s.db.Update(func(tx *bolt.Tx) error {
 
@@ -56,20 +56,33 @@ func (s *RepoStore) PutRepoOptions(options *repository.RepoOptions) error {
 
 		// Get bucket for repoKey
 		bRepo, err := bRepos.CreateBucketIfNotExists(repoKey)
-
 		if err != nil {
 			return err
 		}
 
 		// Serialize options
 		repoData, err := options.Serialize()
-
 		if err != nil {
 			return err
 		}
 
 		// Put data to repo bucket
-		return bRepo.Put(bkOptions, repoData)
+		err = bRepo.Put(bkOptions, repoData)
+		if err != nil {
+			return err
+		}
+
+		// Add meta map
+		if metaMap != nil {
+			for mk, value := range metaMap {
+				err = s.txPutMeta(bRepo, []byte(mk), value)
+				if err != nil {
+					return err
+				}
+			}
+		}
+
+		return nil
 
 	})
 }
@@ -171,6 +184,18 @@ func (s *RepoStore) Exists(repoURI string) (exists bool) {
 
 }
 
+// txPutMeta adds meta key and value to repo bucket. All tx prefixed methods must called within a transaction
+func (s *RepoStore) txPutMeta(repoBucket *bolt.Bucket, key []byte, value []byte) error {
+
+	bMeta, err := repoBucket.CreateBucketIfNotExists(bkMeta)
+	if err != nil {
+		return err
+	}
+
+	return bMeta.Put(key, value)
+
+}
+
 // PutMeta adds custom key value pair to repo. If repo not exists it returns ErrRepoNotFound error
 func (s *RepoStore) PutMeta(repoURI string, key []byte, value []byte) error {
 
@@ -190,12 +215,7 @@ func (s *RepoStore) PutMeta(repoURI string, key []byte, value []byte) error {
 			return ErrRepoNotFound
 		}
 
-		bMeta, err := bRepo.CreateBucketIfNotExists(bkMeta)
-		if err != nil {
-			return err
-		}
-
-		return bMeta.Put(key, value)
+		return s.txPutMeta(bRepo, key, value)
 
 	})
 
