@@ -121,3 +121,7 @@ func (index *Index) GetURIsByPrefix(prefix string) ([]string, error) {
 func (index *Index) Close() error {
 	return index.bindex.Close()
 }
+
+func (index *Index) DeleteDocument(docURI string) error {
+	return index.bindex.Delete(docURI)
+}

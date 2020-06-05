@@ -74,13 +74,13 @@ func (r *Repo) GetURI() string {
 	return r.repoURI
 }
 
-func (r *Repo) GetFileInfos(path string, recursive bool) (infoMap map[string]*os.FileInfo, err error) {
+func (r *Repo) GetFileInfos(path string, recursive bool) (infoMap map[string]os.FileInfo, err error) {
 
 	if path == "" {
 		path = "/"
 	}
 
-	infoMap = make(map[string]*os.FileInfo)
+	infoMap = make(map[string]os.FileInfo)
 
 	directoryQueue := list.New()
 
@@ -101,7 +101,7 @@ func (r *Repo) GetFileInfos(path string, recursive bool) (infoMap map[string]*os
 			}
 			fpath := filepath.Join(dirPath, info.Name())
 			fileURI := r.GenerateFullPath(fpath)
-			infoMap[fileURI] = &info
+			infoMap[fileURI] = info
 
 			if recursive && info.IsDir() {
 				directoryQueue.PushBack(fpath)
