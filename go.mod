@@ -10,13 +10,19 @@ require (
 	github.com/facebookgo/ensure v0.0.0-20200202191622-63f1cf65ac4c // indirect
 	github.com/facebookgo/stack v0.0.0-20160209184415-751773369052 // indirect
 	github.com/facebookgo/subset v0.0.0-20200203212716-c811ad88dec4 // indirect
+	github.com/gin-gonic/gin v1.6.3
 	github.com/go-git/go-git/v5 v5.0.0
-	github.com/golang/protobuf v1.4.2
+	github.com/golang/protobuf v1.4.2 // indirect
 	github.com/jmhodges/levigo v1.0.0 // indirect
+	github.com/magiconair/properties v1.8.0
+	github.com/mitchellh/go-homedir v1.1.0
 	github.com/remyoudompheng/bigfft v0.0.0-20200410134404-eec4a21b6bb0 // indirect
+	github.com/sirupsen/logrus v1.2.0
+	github.com/spf13/cobra v1.0.0
+	github.com/spf13/viper v1.4.0
 	github.com/stretchr/testify v1.4.0
 	github.com/tecbot/gorocksdb v0.0.0-20191217155057-f0fad39f321c // indirect
 	go.etcd.io/bbolt v1.3.4
 	golang.org/x/crypto v0.0.0-20200302210943-78000ba7a073
-	google.golang.org/protobuf v1.23.0
+	golang.org/x/net v0.0.0-20200324143707-d3edc9973b7e // indirect
 )
