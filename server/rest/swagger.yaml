@@ -33,6 +33,7 @@ paths:
       tags:
         - "repo"
       summary: "Adds new repository"
+      description: Adds repo into registry only. Does not trigger synchronization
       parameters:
         - in: "body"
           name: "body"
@@ -100,6 +101,23 @@ paths:
               uri:
                 type: string
                 example: "repo://github.com:bahadrix/git-mock-repo"
+
+  /repo/sync:
+    get:
+      tags:
+        - "repo"
+      summary: "Synchronized repo"
+      description: Pull latest data from remote repository. Normally this action periodically happen in server.
+      parameters:
+        - name: uri
+          in: "query"
+          description: "URI of requested repo"
+          required: true
+          type: string
+
+      responses:
+        200:
+          description: "Success"
 
   /search:
     get:

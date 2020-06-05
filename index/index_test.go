@@ -88,8 +88,8 @@ func TestCreateIndex(t *testing.T) {
 		t.Error("Can't get file infos", err)
 	}
 
-	for uri, pInfo := range infos {
-		info := *pInfo
+	for uri, info := range infos {
+
 		extension := strings.ToLower(filepath.Ext(info.Name()))
 
 		if extension != ".md" {
