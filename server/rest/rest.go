@@ -20,6 +20,20 @@ func setupRouter(host string, port int, op *operator.Operator) *gin.Engine {
 		context.String(200, "PONGv%s %s %d", VERSION, host, port)
 	})
 
+	v1.GET("/repos", func(context *gin.Context) {
+		repos, err := op.GetRepos()
+
+		if err != nil {
+			context.JSON(500, gin.H{
+				"error": err.Error(),
+			})
+
+			return
+		}
+
+		context.JSON(200, repos)
+	})
+
 	v1.PUT("/repos", func(context *gin.Context) {
 		var opts repository.RepoOptions
 

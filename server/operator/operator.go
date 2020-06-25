@@ -84,6 +84,10 @@ func (op *Operator) generateRepo(repoURI string) (*repository.Repo, error) {
 	return repository.NewRepo(repoPath, options)
 }
 
+func (op *Operator) GetRepos() (items []string, err error) {
+	return op.store.FindAll()
+}
+
 func (op *Operator) AddRepo(options *repository.RepoOptions) error {
 
 	uri := options.GetNormalizedURI()
