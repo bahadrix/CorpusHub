@@ -71,6 +71,15 @@ func TestRest(t *testing.T) {
 
 	assert.Equal(t, 200, resp.Code)
 
+	// Test get repos
+	req, _ = http.NewRequest("GET", "/v1/repos", nil)
+	resp = doRequest(router, req)
+
+	var jsonObject []string
+	_ = json.Unmarshal([]byte(resp.Body.String()), &jsonObject)
+
+	assert.Equal(t, []string{mockRepoOptions.GetNormalizedURI()}, jsonObject, resp.Body.String())
+
 	// Test manual repo sync
 	req, _ = http.NewRequest("GET", fmt.Sprintf("/v1/repo/sync?uri=%s", mockRepoOptions.GetNormalizedURI()), nil)
 	resp = doRequest(router, req)
