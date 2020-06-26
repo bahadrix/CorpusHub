@@ -2,6 +2,7 @@ package operator
 
 import (
 	"github.com/bahadrix/corpushub/repository"
+	"github.com/stretchr/testify/assert"
 	"io/ioutil"
 	"os"
 	"testing"
@@ -47,6 +48,14 @@ func TestOperator(t *testing.T) {
 	if err != nil {
 		t.Error(err)
 	}
+
+	repos, err := operator.GetRepos()
+	if err != nil {
+		t.Error(err)
+	}
+	assert.IsType(t, []string{}, repos)
+	assert.Equal(t, 1, len(repos))
+	assert.Equal(t, []string{mockRepoOptions.GetNormalizedURI()}, repos, repos)
 
 	err = operator.SyncRepo(mockRepoOptions.GetNormalizedURI())
 	if err != nil {
