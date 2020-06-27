@@ -75,10 +75,10 @@ func TestRest(t *testing.T) {
 	req, _ = http.NewRequest("GET", fmt.Sprintf("/v1/repo?uri=%s", mockRepoOptions.GetNormalizedURI()), nil)
 	resp = doRequest(router, req)
 
-	var respRepoOptions repository.RepoOptions
+	var respRepoOptions *repository.RepoOptions
 	_ = json.Unmarshal([]byte(resp.Body.String()), &respRepoOptions)
 
-	assert.Equal(t, *mockRepoOptions, respRepoOptions)
+	assert.Equal(t, mockRepoOptions, respRepoOptions)
 
 	// Test get repos
 	req, _ = http.NewRequest("GET", "/v1/repos", nil)
