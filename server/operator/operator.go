@@ -88,6 +88,10 @@ func (op *Operator) GetRepos() (items []string, err error) {
 	return op.store.FindAll()
 }
 
+func (op *Operator) GetRepo(repoURI string) (repo *repository.Repo, err error) {
+	return op.rc.Get(repoURI)
+}
+
 func (op *Operator) AddRepo(options *repository.RepoOptions) error {
 
 	uri := options.GetNormalizedURI()

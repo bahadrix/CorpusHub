@@ -67,6 +67,20 @@ func setupRouter(host string, port int, op *operator.Operator) *gin.Engine {
 		context.Status(200)
 	})
 
+	v1.GET("/repo", func(context *gin.Context) {
+		repoURI := context.Query("uri")
+
+		repo, err := op.GetRepo(repoURI)
+
+		if err != nil {
+			context.JSON(500, gin.H{
+				"error": err.Error(),
+			})
+			return
+		}
+		context.JSON(200, repo.GetOptions())
+	})
+
 	v1.GET("/search", func(context *gin.Context) {
 		q := context.Query("q")
 		result, err := op.Search(q)

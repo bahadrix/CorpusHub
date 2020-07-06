@@ -74,6 +74,10 @@ func (r *Repo) GetURI() string {
 	return r.repoURI
 }
 
+func (r *Repo) GetOptions() *RepoOptions {
+	return r.options
+}
+
 func (r *Repo) GetFileInfos(path string, recursive bool) (infoMap map[string]os.FileInfo, err error) {
 
 	if path == "" {
