@@ -1,3 +1,6 @@
+see development branch for active progress
+
+
 # CorpusHub
 
 The principal aim of this project is obtain a server that checks periodically pre-registered git repositories for markdown files and indexing them within full-text search capabilities and hosts them for possible graphical user interfaces via REST service.
